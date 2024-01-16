@@ -72,8 +72,27 @@ with open('estado.sql', 'wb') as dec_file:
 # TASK create two function to encrypt and decrypt a file
 # taking as parameter the key and the filename to encrypt/decrypt
 
-def encrypt(key, filename):
+def encrypt(fernet, filename):
     pass
 
-def decrypt(key, filename):
+def decrypt(fernet, filename):
     pass
+
+def main():
+    # Hai già una chiave salvata ? 
+    
+    # Se la chiave non è salvata non esiste un file.key allora genera
+    # la chiave e usala
+    
+    # Crea oggetto Fernet(key)
+    
+    # Task vuoi criptare o decriptare un file ?
+    
+    
+    
+    
+    pass
+
+
+if __name__ == "__main__":
+    main()
