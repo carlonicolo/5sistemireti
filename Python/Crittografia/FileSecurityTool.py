@@ -1,98 +1,82 @@
 # import required module
 from cryptography.fernet import Fernet
 
-# key generation
-key = Fernet.generate_key()
+def encrypt(fernet, file_path):
+  with open(file_path, 'rb') as file:
+     original = file.read()
+     encrypted = fernet.encrypt(original)
+  with open(file_path, 'wb') as encrypted_file:
+     encrypted_file.write(encrypted)
+  
+  print("File criptato: ")
+  print(encrypted)
 
-# string the key in a file
-# Above code will generate a file with the name filekey.key. 
-# The file will contain one line, which is a string acting as a ke
-with open('filekey.key', 'wb') as filekey:
-    filekey.write(key)
 
-""" Encrypt the file using the key generated
-Now we have an encrypted key and file to be encrypted. Now write code to encrypt this file:
+def decrypt(fernet, file_path):
+  with open(file_path, 'rb') as enc_file:
+      encrypted = enc_file.read()
+      decrypted = fernet.decrypt(encrypted)
+  with open(file_path, 'wb') as dec_file:
+      dec_file.write(decrypted)
+  print("File decriptato: ")
+  print(decrypted)
 
-1 - Open the file that contains the key.
-2 - Initialize the Fernet object and store it in the fernet variable.
-3 - Read the original file.
-4 - Encrypt the file and store it into an object.
-5 - Then write the encrypted data into the same file nba.csv. """
 
-# opening the key
-with open('filekey.key', 'rb') as filekey:
-	key = filekey.read()
+def createKey(file_path):
+  print("Creazione chiave...")
+  key = Fernet.generate_key()
+  with open(file_path, 'wb') as filekey:
+        filekey.write(key)
 
-# using the generated key
-fernet = Fernet(key)
-
-#---------------- Encrypt ------------------
-
-# opening the original file to encrypt
-with open('estado.sql', 'rb') as file:
-	original = file.read()
-	
-# encrypting the file
-encrypted = fernet.encrypt(original)
-
-# opening the file in write mode and 
-# writing the encrypted data
-with open('estado.sql', 'wb') as encrypted_file:
-	encrypted_file.write(encrypted)
-
-#----------------------------------------------
-
-#------------- Decrypt ------------------------
-
-""" Decrypt the encrypted file
-We have to use the same key to decrypt the file:
-
-Initialize the Fernet object and store it in the fernet variable.
-Read the encrypted file.
-Decrypt the file and store it into an object.
-Then write the decrypted data into the same file nba.csv. """
-
-# using the key
-fernet = Fernet(key)
-
-# opening the encrypted file
-with open('estado.sql', 'rb') as enc_file:
-	encrypted = enc_file.read()
-
-# decrypting the file
-decrypted = fernet.decrypt(encrypted)
-
-# opening the file in write mode and
-# writing the decrypted data
-with open('estado.sql', 'wb') as dec_file:
-	dec_file.write(decrypted)
-
-#----------------------------------------------#
-
-# TASK create two function to encrypt and decrypt a file
-# taking as parameter the key and the filename to encrypt/decrypt
-
-def encrypt(fernet, filename):
-    pass
-
-def decrypt(fernet, filename):
-    pass
 
 def main():
-    # Hai già una chiave salvata ? 
+  control = input("Inserisci E per criptare, D per decriptare ---> ")
+  file_path = input("Inserisci il path del file criptare/decriptare ---> ")
     
-    # Se la chiave non è salvata non esiste un file.key allora genera
-    # la chiave e usala
-    
-    # Crea oggetto Fernet(key)
-    
-    # Task vuoi criptare o decriptare un file ?
-    
-    
-    
-    
-    pass
 
+  controllo_key = input("Hai già una chiave salvata? SI/NO ---> ")
+  if (controllo_key == "SI" and control == "E"):
+    with open('filekey.key', 'rb') as filekey:
+      key = filekey.read()
+      fernet = Fernet(key)
+      try:
+        encrypt(fernet, file_path)
+        print("\n############ File criptato ############\n")
+      except:
+        print("\n################ Encryption doesn't work ######################\n")
+
+  if (controllo_key == "SI" and control == "D"):
+    with open('filekey.key', 'rb') as filekey:
+      key = filekey.read()
+      fernet = Fernet(key)
+      decrypt(fernet, file_path)
+  
+  elif controllo_key == "NO":
+    createKey(file_path)
+      #print("Creazione chiave...")
+      #key = Fernet.generate_key()
+      #with open('filekey.key', 'wb') as filekey:
+      #      filekey.write(key)
+    with open(file_path, 'rb') as filekey:
+      key = filekey.read()
+      fernet = Fernet(key)
+    
+    if control == "E":
+        encrypt(fernet, file_path)
+    else:
+       decrypt(fernet, file_path)
 
 if __name__ == "__main__":
-    main()
+      main()
+      
+
+
+# TASK 1
+# Una volta decriptato un file, la chiave utilizzata deve essere cancellata
+# in modo tale da sapere che il file è nella forma originale
+
+# TASK 2
+# Gestire le eccezioni delle funzioni principali try, except
+
+# TASK 3
+# Crea una versione ad oggetti di questo semplice programmino 
