@@ -25,11 +25,12 @@ def decrypt(fernet, file_path):
     print("File decriptato: ")
     print(decrypted)
     (filekey.key)
-    try:
-        os.unlink("Crittografia/filekey.key")
-        print("Key eliminato, file decriptato")
-    except:
-        print("File non cancellato")
+    
+if os.path.exists("filekey.key"):
+  os.remove("filekey.key")
+  print("chiave cancellata")
+else:
+  print("Il file non esiste")
 
 
 def createKey(file_path):
