@@ -1,0 +1,63 @@
+# Comandi per configurare due Vlan sul router
+#Vlan 10
+int g0/0.10
+encapsulation dot1Q 10
+ip address 192.168.1.100 255.255.255.128
+
+#Vlan 20
+int g0/0.20
+encapsulation dot1Q 20
+ip address 192.168.1.200 255.255.255.128
+
+# vedere la configurazione
+do sh run
+
+#############
+# Per vedere cosa succede sullo switch
+show run 
+
+#### VLAN DHCP
+- impostare tutti i pc con IP da DHCP
+- Configurare il router come server DHCP
+
+# questo comand abilita la modalità di configurazione 
+`enable`
+conf t
+ip dhcp pool LEFT
+default router 192.168.1.100
+
+# ora definiamo la rete
+network 192.168.1.0 255.255.255.128
+
+-- A questo punto facciamo la stessa cosa per la VLAN RIGHT
+ip dhcp pool RIGHT
+default router 192.168.1.200
+network 192.168.1.128 255.255.255.128
+
+do show run
+
+#####################
+
+semplice configurazione di un server settando gli ip, leftPool e rightPool
+Abilitare la porta di comuncazione tra il router e il server
+Importante abilitare con i comandi via CLI sul router gli helper address per entrambe le VLAN
+in modo tale che possano "vedere" e raggiungere il server DHCP
+
+# entrare in modalità configurazione
+enable
+conf t
+
+# indirizzo del server DHCP
+int g0/0.10
+ip helper-address 192.168.2.1
+
+# stessa cosa per l'altra VLAN
+int g0/0.20
+ip helper-address 192.168.2.1
+
+do sh run
+
+
+
+
+
