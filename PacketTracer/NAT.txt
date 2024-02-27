@@ -1,0 +1,45 @@
+# Necessità di definire quali sono le rotte sulle reti
+# esco da tutte le configurazioni del router 
+# digitando 'exit' fino a quando non avrò ---> Router#
+# A questo punto 
+sh run
+
+# e per vedere le rotte
+sh ip route
+
+# Configuro delle rotte statiche per raggiungere la rete 192.168.3.0 attraversando
+# il router 8.0.0.2
+conf t
+ip route 192.168.3.0 255.255.255.0 8.0.0.2
+do sh ip route
+
+# Analogamente con l'altro router
+ip route 192.168.1.0 255.255.255.0 8.0.0.1
+do sh ip route
+
+
+# Prova a pingare da un pc di una rete al pc dell'altra rete
+
+# Abilitare uno static NAT in modo tale da raggiungere un pc 
+# all'interno di una rete (subnet) utilizzano l'ip pubblico del router
+
+# Primo passo mi posiziono sulla CLI del router ed identifico qual'è la zona inside e quella outside
+# Router 1
+conf t
+int g0/0
+ip nat inside
+
+int g0/1
+ip nat outside
+
+exit
+
+# con questo comando posso vedere cosa inserire nel comando
+ip nat inside ?
+
+ip nat inside source static ?
+ip nat inside source static 192.168.3.1 8.0.0.2
+
+# Proviamo ad utilizzare il browser di un pc digitando
+# 8.0.0.2 e vedremo che raggiungerà il server utilizzando 
+# l'ip "pubblico"
